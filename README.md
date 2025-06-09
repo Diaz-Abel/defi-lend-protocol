@@ -32,14 +32,17 @@ Este proyecto implementa un protocolo de préstamos descentralizado que permite 
 ```bash
 # Clonar e instalar dependencias
 git clone <url-del-repositorio>
-cd Final
+cd defi-lend-protocol
 npm run setup  # Instala dependencias del proyecto y frontend
 
 # Configurar variables de entorno
-cp .env.example .env
-cp web_app/env.example web_app/.env
-# Editar los archivos .env con tus datos
+cp env.example .env
+# Editar .env con tus datos:
+# - PRIVATE_KEY: Tu clave privada para despliegue
+# - Direcciones de contratos (si vas a desplegar nuevos)
 ```
+
+> **✅ Configuración simplificada:** Solo necesitas UN archivo `.env` en la raíz que sirve tanto para Hardhat como para el frontend.
 
 ## 🛠️ Scripts Disponibles
 
@@ -84,6 +87,8 @@ npm run copy-abi
 ## 📁 Estructura del Proyecto
 
 ```
+├── .env                        # ← Variables de entorno (Hardhat + Frontend)
+├── env.example                 # ← Plantilla de configuración
 ├── contracts/
 │   ├── LendingProtocol.sol     # Contrato principal
 │   ├── CollateralToken.sol     # Token cUSD  
@@ -99,8 +104,10 @@ npm run copy-abi
 │   │   ├── components/         # Componentes React
 │   │   ├── abi/               # ABIs auto-generados
 │   │   └── App.jsx            # Componente principal
+│   ├── vite.config.js          # ← Lee ../env
 │   └── README.md              # Documentación del frontend
-└── hardhat.config.js          # Configuración de Hardhat
+├── hardhat.config.cjs          # Configuración de Hardhat
+└── package.json               # Scripts y dependencias
 ```
 
 ## 🎨 Frontend Profesional
@@ -129,18 +136,22 @@ El frontend incluye:
 
 ### Variables de Entorno
 
-**Raíz del proyecto (.env):**
+**Archivo único (.env en la raíz):**
 ```env
+# Para despliegue de contratos con Hardhat
 PRIVATE_KEY=tu_clave_privada_para_despliegue
-```
 
-**Frontend (web_app/.env):**
-```env
+# Para el frontend (prefijo VITE_ requerido)
 VITE_LENDING_PROTOCOL_ADDRESS=0x7809790a4FF93B9CB9e563BB8D09771bcD75d51D
 VITE_COLLATERAL_TOKEN_ADDRESS=0x464f40745CEd1b7Fd9D6FC91a4dbe8D74cb8ff37
 VITE_LOAN_TOKEN_ADDRESS=0x7f17765F765bEaD532FcD456f01Da38B409a243c
 VITE_RPC_URL=https://rpc.ephemery.dev
 ```
+
+> **⚠️ Importante:** 
+> - Un solo archivo `.env` en la raíz sirve para Hardhat Y el frontend
+> - Vite está configurado para leer desde `../env` (raíz del proyecto)
+> - El archivo está en `.gitignore` por seguridad
 
 ### Red Ephemery en MetaMask
 ```
@@ -165,7 +176,7 @@ npm run clean           # Limpiar cuando hay problemas
 
 # Despliegue
 npm run deploy          # Despliega a Ephemery
-# Luego actualiza las direcciones en web_app/.env
+# ⚠️ IMPORTANTE: Luego actualiza las direcciones VITE_* en .env con los nuevos contratos
 ```
 
 ## 🔒 Testing y Cobertura

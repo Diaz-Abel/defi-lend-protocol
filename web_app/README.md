@@ -26,13 +26,13 @@ Frontend profesional para el protocolo de préstamos descentralizados DeFi Lend,
 npm install
 ```
 
-2. **Configurar variables de entorno:**
-```bash
-cp env.example .env
-```
+2. **Variables de entorno:**
 
-Edita el archivo `.env` con las direcciones reales de tus contratos:
+Las variables se configuran en el archivo `.env` de la raíz del proyecto (no en web_app).
+Vite está configurado para leer desde `../env`.
+
 ```env
+# En el archivo .env de la raíz del proyecto
 VITE_LENDING_PROTOCOL_ADDRESS=0x...
 VITE_COLLATERAL_TOKEN_ADDRESS=0x...
 VITE_LOAN_TOKEN_ADDRESS=0x...

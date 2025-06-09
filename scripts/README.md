@@ -75,7 +75,7 @@ node scripts/post-compile.js
 ### Despliegue
 ```bash
 npm run deploy  # Despliega a Ephemery
-# Actualizar addresses en .env files
+# ⚠️ IMPORTANTE: Actualizar direcciones VITE_* en .env (raíz del proyecto)
 ```
 
 ## 📁 Estructura de ABIs Generada
@@ -111,13 +111,12 @@ const contract = new ethers.Contract(address, abi, signer)
 
 ### Variables de Entorno Requeridas
 
-**Para deploy.js:**
-- `PRIVATE_KEY`: Clave privada para el despliegue
-
-**Para el frontend:**
-- `VITE_LENDING_PROTOCOL_ADDRESS`
-- `VITE_COLLATERAL_TOKEN_ADDRESS`
-- `VITE_LOAN_TOKEN_ADDRESS`
+**Archivo único .env en la raíz del proyecto:**
+- `PRIVATE_KEY`: Clave privada para el despliegue (Hardhat)
+- `VITE_LENDING_PROTOCOL_ADDRESS`: Dirección del contrato principal (Frontend)
+- `VITE_COLLATERAL_TOKEN_ADDRESS`: Dirección del token cUSD (Frontend)
+- `VITE_LOAN_TOKEN_ADDRESS`: Dirección del token dDAI (Frontend)
+- `VITE_RPC_URL`: URL RPC de Ephemery (Hardhat + Frontend)
 
 ### Scripts npm
 
