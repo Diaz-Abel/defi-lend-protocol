@@ -154,9 +154,9 @@ PRIVATE_KEY=tu_clave_privada_para_despliegue
 USER_ADDRESS=tu_direccion_de_wallet_para_recibir_tokens
 
 # Para el frontend (prefijo VITE_ requerido)
-VITE_LENDING_PROTOCOL_ADDRESS=0x8B6931A0a04B7394b48142D0566BdA9B42c18FA7
-VITE_COLLATERAL_TOKEN_ADDRESS=0xBAc47C6B5b0E15E61D8e8ecb546A322050146379
-VITE_LOAN_TOKEN_ADDRESS=0xea0420645Fa21FDb317DB34D67d3Bb3aF154a19b
+VITE_LENDING_PROTOCOL_ADDRESS=0x3dca7A45C6515601216f9EFE2bC3eBF4aB40F472
+VITE_COLLATERAL_TOKEN_ADDRESS=0x7cD29C8E3f9adF4E8Ab142eFa80Df23D2b558b5B
+VITE_LOAN_TOKEN_ADDRESS=0x9e1b222EA3Ac8C46638F3533F9518D70E9D33fcc
 VITE_RPC_URL=https://rpc.ephemery.dev
 ```
 
@@ -211,9 +211,9 @@ npm run coverage  # Para ver reporte completo
 
 | Contrato | Dirección |
 |----------|-----------|
-| LendingProtocol | `0x8B6931A0a04B7394b48142D0566BdA9B42c18FA7` |
-| CollateralToken (cUSD) | `0xBAc47C6B5b0E15E61D8e8ecb546A322050146379` |
-| LoanToken (dDAI) | `0xea0420645Fa21FDb317DB34D67d3Bb3aF154a19b` |
+| LendingProtocol | `0x3dca7A45C6515601216f9EFE2bC3eBF4aB40F472` |
+| CollateralToken (cUSD) | `0x7cD29C8E3f9adF4E8Ab142eFa80Df23D2b558b5B` |
+| LoanToken (dDAI) | `0x9e1b222EA3Ac8C46638F3533F9518D70E9D33fcc` |
 
 > ✅ **Contratos verificados y desplegados en Ephemery Testnet**  
 > 🔗 Puedes verificar estos contratos en el explorador de Ephemery
@@ -252,11 +252,11 @@ Para ver tus tokens cUSD y dDAI en MetaMask:
 1. **Abrir MetaMask** y asegurarte de estar en la red Ephemery
 2. **Hacer clic en "Importar tokens"**
 3. **Agregar token cUSD:**
-   - Dirección: `0xBAc47C6B5b0E15E61D8e8ecb546A322050146379`
+   - Dirección: `0x7cD29C8E3f9adF4E8Ab142eFa80Df23D2b558b5B`
    - Símbolo: `cUSD`
    - Decimales: `18`
 4. **Agregar token dDAI:**
-   - Dirección: `0xea0420645Fa21FDb317DB34D67d3Bb3aF154a19b`
+   - Dirección: `0x9e1b222EA3Ac8C46638F3533F9518D70E9D33fcc`
    - Símbolo: `dDAI`
    - Decimales: `18`
 
