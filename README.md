@@ -2,8 +2,17 @@
 
 Este proyecto implementa un protocolo de préstamos descentralizado que permite a los usuarios depositar tokens como colateral y solicitar préstamos con un ratio de colateralización del 150%. Incluye un frontend profesional inspirado en plataformas DeFi reales.
 
+## 🌐 Demo en Vivo
+
+Puedes ver y probar el proyecto en vivo aquí:
+
+👉 **[Prueba en Vivo - DeFi Lend](https://defi-lend-protocol.vercel.app/)**
+
+> **Nota:** Asegúrate de tener MetaMask instalado y configurado con la red Ephemery Testnet para interactuar con la aplicación.
+
 ## 🎯 Características
 
+- **Faucet integrado**: Obtén tokens gratuitos cada hora para probar
 - **Depósito de colateral**: Deposita cUSD como colateral
 - **Préstamos descentralizados**: Solicita préstamos en dDAI
 - **Ratio de colateralización**: 150% mínimo requerido
@@ -39,6 +48,7 @@ npm run setup  # Instala dependencias del proyecto y frontend
 cp env.example .env
 # Editar .env con tus datos:
 # - PRIVATE_KEY: Tu clave privada para despliegue
+# - USER_ADDRESS: Tu dirección de wallet (solo si vas a desplegar)
 # - Direcciones de contratos (si vas a desplegar nuevos)
 ```
 
@@ -51,7 +61,6 @@ cp env.example .env
 npm run setup           # Instalar todas las dependencias
 npm run clean           # Limpiar artifacts y cache de Hardhat
 npm run compile         # Solo compilar contratos
-npm run build           # Compilar contratos + copiar ABIs (rápido)
 npm run build-contracts # Limpiar + compilar + copiar ABIs (completo)
 npm run copy-abi        # Solo copiar ABIs al frontend
 npm run test            # Ejecutar tests
@@ -72,7 +81,7 @@ El proyecto incluye un sistema automatizado para mantener sincronizados los ABIs
 
 ```bash
 # Flujo automático
-npm run build  # compile + copy-abi
+npm run build-contracts  # compile + copy-abi
 
 # Manual si es necesario
 npm run copy-abi
@@ -141,10 +150,13 @@ El frontend incluye:
 # Para despliegue de contratos con Hardhat
 PRIVATE_KEY=tu_clave_privada_para_despliegue
 
+# Para despliegue de contratos (requerido solo si vas a desplegar)
+USER_ADDRESS=tu_direccion_de_wallet_para_recibir_tokens
+
 # Para el frontend (prefijo VITE_ requerido)
-VITE_LENDING_PROTOCOL_ADDRESS=0x7809790a4FF93B9CB9e563BB8D09771bcD75d51D
-VITE_COLLATERAL_TOKEN_ADDRESS=0x464f40745CEd1b7Fd9D6FC91a4dbe8D74cb8ff37
-VITE_LOAN_TOKEN_ADDRESS=0x7f17765F765bEaD532FcD456f01Da38B409a243c
+VITE_LENDING_PROTOCOL_ADDRESS=0x8B6931A0a04B7394b48142D0566BdA9B42c18FA7
+VITE_COLLATERAL_TOKEN_ADDRESS=0xBAc47C6B5b0E15E61D8e8ecb546A322050146379
+VITE_LOAN_TOKEN_ADDRESS=0xea0420645Fa21FDb317DB34D67d3Bb3aF154a19b
 VITE_RPC_URL=https://rpc.ephemery.dev
 ```
 
@@ -171,7 +183,7 @@ npm run coverage        # Ver cobertura de tests
 npm run start-app       # Desarrollo del frontend (desde raíz)
 
 # Desarrollo iterativo
-npm run build           # Compilación rápida + ABIs
+npm run build-contracts # Compilación completa + ABIs
 npm run clean           # Limpiar cuando hay problemas
 
 # Despliegue
@@ -199,9 +211,9 @@ npm run coverage  # Para ver reporte completo
 
 | Contrato | Dirección |
 |----------|-----------|
-| LendingProtocol | `0x7809790a4FF93B9CB9e563BB8D09771bcD75d51D` |
-| CollateralToken (cUSD) | `0x464f40745CEd1b7Fd9D6FC91a4dbe8D74cb8ff37` |
-| LoanToken (dDAI) | `0x7f17765F765bEaD532FcD456f01Da38B409a243c` |
+| LendingProtocol | `0x8B6931A0a04B7394b48142D0566BdA9B42c18FA7` |
+| CollateralToken (cUSD) | `0xBAc47C6B5b0E15E61D8e8ecb546A322050146379` |
+| LoanToken (dDAI) | `0xea0420645Fa21FDb317DB34D67d3Bb3aF154a19b` |
 
 > ✅ **Contratos verificados y desplegados en Ephemery Testnet**  
 > 🔗 Puedes verificar estos contratos en el explorador de Ephemery
@@ -213,15 +225,63 @@ npm run coverage  # Para ver reporte completo
 - Añadir red Ephemery Testnet
 - Obtener ETH de testnet para gas
 
-### 2. Flujo de Usuario
-1. **Conectar wallet** en la DApp
-2. **Depositar colateral** (cUSD)
-3. **Pedir préstamo** (hasta 66% del colateral)
-4. **Gestionar posición** (ver métricas en dashboard)
-5. **Pagar préstamo** (capital + interés)
-6. **Retirar colateral** (cuando no hay deuda)
+### 2. Obtener Tokens para Probar
 
-### 3. Características del Dashboard
+#### 🚀 **Si usas los contratos ya desplegados:**
+La aplicación incluye un **faucet integrado** que permite a cualquier usuario obtener tokens gratuitos:
+
+- **100 cUSD** cada hora para usar como colateral
+- **100 dDAI** cada hora para pagar préstamos
+- **Cooldown de 1 hora** entre usos para evitar spam
+- **Acceso directo** desde la interfaz principal (tab "Obtener Tokens")
+
+#### 🔧 **Si despliegas nuevos contratos:**
+**Requisito previo:** Debes configurar la variable `USER_ADDRESS` en tu archivo `.env` con tu dirección de wallet.
+
+Al ejecutar `npm run deploy`, automáticamente recibirás:
+- **100 cUSD** en tu wallet (para usar como colateral)
+- **100 dDAI** en tu wallet (para pagar préstamos)
+- **1000 dDAI** se envían al protocolo (para préstamos)
+
+> **⚠️ Importante:** Sin la variable `USER_ADDRESS` configurada, el despliegue fallará.
+
+### 3. Ver Tokens en MetaMask
+
+Para ver tus tokens cUSD y dDAI en MetaMask:
+
+1. **Abrir MetaMask** y asegurarte de estar en la red Ephemery
+2. **Hacer clic en "Importar tokens"**
+3. **Agregar token cUSD:**
+   - Dirección: `0xBAc47C6B5b0E15E61D8e8ecb546A322050146379`
+   - Símbolo: `cUSD`
+   - Decimales: `18`
+4. **Agregar token dDAI:**
+   - Dirección: `0xea0420645Fa21FDb317DB34D67d3Bb3aF154a19b`
+   - Símbolo: `dDAI`
+   - Decimales: `18`
+
+> **💡 Tip:** Una vez importados, podrás ver tus balances de tokens directamente en MetaMask.
+
+### 4. Flujo de Usuario
+1. **Conectar wallet** en la DApp
+2. **Obtener tokens** (faucet o despliegue)
+3. **Depositar colateral** (cUSD)
+4. **Pedir préstamo** (hasta 66% del colateral)
+5. **Gestionar posición** (ver métricas en dashboard)
+6. **Pagar préstamo** (capital + interés)
+7. **Retirar colateral** (cuando no hay deuda)
+
+### 5. Ejemplo de Uso con 100 cUSD
+- **Obtener tokens**: Usa el faucet para obtener 100 cUSD y 100 dDAI
+- **Depositar**: 100 cUSD como colateral
+- **Pedir prestado**: Hasta 66 dDAI (66% del colateral)
+- **Interés**: 5% semanal = 3.3 dDAI
+- **Total a pagar**: 69.3 dDAI (66 + 3.3)
+- **Ratio de colateralización**: 151.5% (100/66)
+
+> **💡 Tip:** El sistema incluye verificaciones automáticas de balance y aprobación de tokens para facilitar el proceso de pago.
+
+### 6. Características del Dashboard
 - Métricas en tiempo real
 - Factor de salud con alertas
 - Cálculos automáticos de límites

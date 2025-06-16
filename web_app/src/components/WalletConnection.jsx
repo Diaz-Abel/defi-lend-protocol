@@ -91,13 +91,7 @@ const WalletConnection = ({ account, onConnect, onDisconnect }) => {
               Copiar dirección
             </button>
             
-            <button
-              onClick={openInEtherscan}
-              className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-slate-800 transition-colors text-sm"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Ver en Ephemery
-            </button>
+            
             
             <hr className="my-2 border-slate-700" />
             

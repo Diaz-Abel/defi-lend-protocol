@@ -69,7 +69,17 @@ contract LendingProtocol is Ownable, ReentrancyGuard {
         uint256 interest = calculateInterest(msg.sender);
         uint256 totalRepayment = data.debt + interest;
         
-        require(loanToken.transferFrom(msg.sender, address(this), totalRepayment), "Transfer failed");
+        // Verificar el balance del usuario
+        uint256 userBalance = loanToken.balanceOf(msg.sender);
+        require(userBalance >= totalRepayment, "Insufficient balance");
+        
+        // Verificar la aprobación
+        uint256 allowance = loanToken.allowance(msg.sender, address(this));
+        require(allowance >= totalRepayment, "Insufficient allowance");
+        
+        // Intentar la transferencia
+        bool success = loanToken.transferFrom(msg.sender, address(this), totalRepayment);
+        require(success, "Transfer failed");
         
         data.debt = 0;
         data.lastInterestTimestamp = block.timestamp;

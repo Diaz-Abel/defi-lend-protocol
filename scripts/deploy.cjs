@@ -45,6 +45,11 @@ async function main() {
     await collateralToken.mint(userAddress, mintCusdAmount);
     console.log(`Minted ${mintCusdAmount.toString()} cUSDs to ${userAddress}`);
 
+    // Distribuir dDAIs al usuario para pruebas
+    const mintDdaiToUser = hre.ethers.parseEther("100"); // 100 dDAI para el usuario
+    await loanToken.mint(userAddress, mintDdaiToUser);
+    console.log(`Minted ${mintDdaiToUser.toString()} dDAIs to ${userAddress}`);
+
     // Mostrar resumen final
     const addresses = {
       collateralToken: collateralTokenAddress,

@@ -183,4 +183,4 @@ La siguiente rúbrica se utilizará para la corrección.
 | Código limpio y documentación clara           | 1      |  
 | Test unitarios                                | 1      |  
 | Cobertura de los tests del 100%               | 1      |  
-| **Total**                                     | **13** |
+| **Total**                                     | **14** |

@@ -67,13 +67,15 @@ const ActionPanel = ({
   onBorrow, 
   onRepay, 
   onWithdraw,
+  onFaucetCUSD,
+  onFaucetDDAI,
   isLoading 
 }) => {
   const [amounts, setAmounts] = useState({
     deposit: '',
     borrow: ''
   })
-  const [activeTab, setActiveTab] = useState('deposit')
+  const [activeTab, setActiveTab] = useState('faucet')
 
   const { collateral, debt, interest } = userData
   const totalDebt = parseFloat(debt) + parseFloat(interest)
@@ -102,6 +104,12 @@ const ActionPanel = ({
         case 'withdraw':
           await onWithdraw()
           break
+        case 'faucetCUSD':
+          await onFaucetCUSD()
+          break
+        case 'faucetDDAI':
+          await onFaucetDDAI()
+          break
       }
       // Limpiar inputs después de una acción exitosa
       setAmounts({ deposit: '', borrow: '' })
@@ -111,6 +119,7 @@ const ActionPanel = ({
   }
 
   const tabs = [
+    { id: 'faucet', label: 'Obtener Tokens', icon: DollarSign },
     { id: 'deposit', label: 'Depositar', icon: ArrowDownLeft },
     { id: 'borrow', label: 'Pedir Préstamo', icon: DollarSign },
     { id: 'repay', label: 'Pagar', icon: ArrowUpRight },
@@ -141,6 +150,63 @@ const ActionPanel = ({
       {/* Content */}
       <div className="flex justify-center">
         <div className="w-full max-w-lg">
+        {activeTab === 'faucet' && (
+          <ActionCard
+            title="Obtener Tokens de Prueba"
+            description="Obtén tokens gratuitos para probar la aplicación"
+            icon={DollarSign}
+            variant="primary"
+          >
+            <div className="space-y-4">
+              <InfoBox>
+                Obtén 100 tokens gratuitos cada hora para probar la aplicación. 
+                Necesitas cUSD para depositar como colateral y dDAI para pagar préstamos.
+              </InfoBox>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  onClick={() => handleAction('faucetCUSD')}
+                  disabled={isLoading}
+                  className="defi-button-success disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Procesando...
+                    </>
+                  ) : (
+                    'Obtener 100 cUSD'
+                  )}
+                </button>
+
+                <button
+                  onClick={() => handleAction('faucetDDAI')}
+                  disabled={isLoading}
+                  className="defi-button-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Procesando...
+                    </>
+                  ) : (
+                    'Obtener 100 dDAI'
+                  )}
+                </button>
+              </div>
+
+              <div className="bg-slate-800/50 rounded-lg p-3">
+                <h4 className="text-sm font-medium text-slate-300 mb-2">¿Cómo usar los tokens?</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                  <li>• <strong>cUSD:</strong> Úsalo como colateral para pedir préstamos</li>
+                  <li>• <strong>dDAI:</strong> Úsalo para pagar préstamos (principal + interés)</li>
+                  <li>• Puedes obtener tokens cada hora</li>
+                </ul>
+              </div>
+            </div>
+          </ActionCard>
+        )}
+
         {activeTab === 'deposit' && (
           <ActionCard
             title="Depositar Colateral"

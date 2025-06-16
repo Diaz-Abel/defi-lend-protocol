@@ -279,14 +279,29 @@ function App() {
         return
       }
 
-      // Verificar y aprobar tokens para pago
-      const approved = await checkAndApproveToken(
-        contracts.loanToken, 
-        import.meta.env.VITE_LENDING_PROTOCOL_ADDRESS, 
-        totalDebt.toString()
-      )
+      // Verificar balance
+      const balance = await contracts.loanToken.balanceOf(account)
+      const balanceInEther = parseFloat(ethers.utils.formatEther(balance))
       
-      if (!approved) return
+      if (balanceInEther < totalDebt) {
+        showToast(`Balance insuficiente. Necesitas ${totalDebt.toFixed(2)} dDAI`, 'error')
+        return
+      }
+
+      // Verificar aprobación
+      const allowance = await contracts.loanToken.allowance(account, import.meta.env.VITE_LENDING_PROTOCOL_ADDRESS)
+      const allowanceInEther = parseFloat(ethers.utils.formatEther(allowance))
+      
+      if (allowanceInEther < totalDebt) {
+        showToast('Aprobando tokens...', 'info')
+        // Usar la función approve() del contrato ERC20
+        const approveTx = await contracts.loanToken.approve(
+          import.meta.env.VITE_LENDING_PROTOCOL_ADDRESS,
+          ethers.utils.parseEther(totalDebt.toString())
+        )
+        await approveTx.wait()
+        showToast('Tokens aprobados exitosamente', 'success')
+      }
 
       showToast('Pagando préstamo...', 'info')
       const tx = await contracts.lendingProtocol.repay()
@@ -320,6 +335,54 @@ function App() {
         showToast('Debes pagar tu deuda antes de retirar el colateral', 'error')
       } else {
         showToast('Error al retirar el colateral', 'error')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const faucetCUSD = async () => {
+    if (!contracts.collateralToken || !account) return
+
+    try {
+      setIsLoading(true)
+      showToast('Obteniendo cUSD del faucet...', 'info')
+      
+      const tx = await contracts.collateralToken.faucet()
+      await tx.wait()
+      
+      await loadUserData(account)
+      showToast('100 cUSD obtenidos exitosamente del faucet', 'success')
+    } catch (error) {
+      console.error('Error usando faucet cUSD:', error)
+      if (error.message.includes('Faucet cooldown not met')) {
+        showToast('Debes esperar 1 hora entre usos del faucet', 'warning')
+      } else {
+        showToast('Error al obtener tokens del faucet', 'error')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const faucetDDAI = async () => {
+    if (!contracts.loanToken || !account) return
+
+    try {
+      setIsLoading(true)
+      showToast('Obteniendo dDAI del faucet...', 'info')
+      
+      const tx = await contracts.loanToken.faucet()
+      await tx.wait()
+      
+      await loadUserData(account)
+      showToast('100 dDAI obtenidos exitosamente del faucet', 'success')
+    } catch (error) {
+      console.error('Error usando faucet dDAI:', error)
+      if (error.message.includes('Faucet cooldown not met')) {
+        showToast('Debes esperar 1 hora entre usos del faucet', 'warning')
+      } else {
+        showToast('Error al obtener tokens del faucet', 'error')
       }
     } finally {
       setIsLoading(false)
@@ -445,6 +508,8 @@ function App() {
               onBorrow={borrow}
               onRepay={repay}
               onWithdraw={withdraw}
+              onFaucetCUSD={faucetCUSD}
+              onFaucetDDAI={faucetDDAI}
               isLoading={isLoading}
             />
           </div>
